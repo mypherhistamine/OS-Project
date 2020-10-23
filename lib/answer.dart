@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Answer extends StatefulWidget {
-  final List ans;
-  final process;
+  final List ans; //the outcome
+  final process; //size
   Answer(this.ans, this.process);
   @override
   _AnswerState createState() => _AnswerState();
@@ -26,18 +26,19 @@ class _AnswerState extends State<Answer> {
                     print(count);
                     print(i);
                     if (i == widget.ans[count]) {
-                      setState(() {
-                        check.add(i);
-                        count++;
-                      });
+                      setState(
+                        () {
+                          check.add(i);
+                          count++;
+                        },
+                      );
                       final snackBar = SnackBar(
                           content: Text(
-                              'Process ${i}, recived resources successfully '));
+                              'Area ${i}, recived resources successfully '));
                       Scaffold.of(context).showSnackBar(snackBar);
                     } else {
-                      final snackBar = SnackBar(
-                          content:
-                              Text('Process ${i}, recived unsuccessfully '));
+                      final snackBar =
+                          SnackBar(content: Text('Area  ${i}, unsuccessfull'));
                       Scaffold.of(context).showSnackBar(snackBar);
                     }
                   },
