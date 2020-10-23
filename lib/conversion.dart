@@ -1,3 +1,4 @@
+import 'package:aniketDa/answer.dart';
 import 'package:flutter/material.dart';
 
 class Conversion extends StatefulWidget {
@@ -16,8 +17,12 @@ class _ConversionState extends State<Conversion> {
   TextEditingController used = TextEditingController();
   List availableGrid = List.generate(10, (index) => null);
   List needGrid = List.generate(10, (i) => List(10), growable: false);
-  List ans = List.generate(10, (index) => null);
+  // List ans = List.generate(10, (index) => null);
   List f = List.generate(10, (index) => null);
+  List visited = List.generate(10, (index) => null);
+  List work = List.generate(10, (index) => null);
+  List safeSequence = List.generate(10, (index) => null);
+  List ans = List.generate(10, (index) => null);
 
   @override
   Widget build(BuildContext context) {
@@ -267,42 +272,64 @@ class _ConversionState extends State<Conversion> {
     }
 
     void compare() {
-      int ind = 0;
+      int count = 0;
 
-      for (int k = 0; k < 5; k++) {
+      //visited array to find the already allocated process
+
+      for (int i = 0; i < int.parse(processes.text); i++) {
+        visited[i] = false;
+      }
+
+      //work array to store the copy of available resources
+      // int work[] = new int[m];
+      for (int i = 0; i < int.parse(resources.text); i++) {
+        work[i] = availableGrid[i];
+      }
+
+      while (count < int.parse(processes.text)) {
+        bool flag = false;
         for (int i = 0; i < int.parse(processes.text); i++) {
-          if (f[i] == 0) {
-            int flag = 0;
-
-            for (int j = 0; j < int.parse(resources.text); j++) {
-              if (needGrid[i][j] > availableGrid[j]) {
-                flag = 1;
-
-                break;
-              }
+          if (visited[i] == false) {
+            int j;
+            for (j = 0; j < int.parse(resources.text); j++) {
+              if (needGrid[i][j] > work[j]) break;
             }
+            if (j == int.parse(resources.text)) {
+              safeSequence[count++] = i;
+              visited[i] = true;
+              flag = true;
 
-            if (flag == 0) {
-              ans[ind++] = i;
-
-              for (int y = 0; y < int.parse(resources.text); y++)
-                availableGrid[y] += grid[i][y];
-
-              f[i] = 1;
+              for (j = 0; j < int.parse(resources.text); j++) {
+                work[j] = work[j] + grid[i][j];
+              }
             }
           }
         }
+        if (flag == false) {
+          break;
+        }
       }
-      print("Following is the SAFE Sequence\n");
-
-      for (int i = 0; i < int.parse(processes.text) - 1; i++)
-        print(
-          " P ->${ans[i]}",
+      if (count < int.parse(processes.text)) {
+        print("The System is UnSafe!");
+        showDialog(
+            context: context,
+            child: Dialog(
+              child: Text("The System is UnSafe!"),
+            ));
+      } else {
+        //System.out.println("The given System is Safe");
+        print("Following is the SAFE Sequence");
+        for (int i = 0; i < int.parse(processes.text); i++) {
+          ans[i] = safeSequence[i];
+          print("P" + safeSequence[i].toString());
+          if (i != int.parse(processes.text) - 1) print(" -> ");
+        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Answer(ans, int.parse(processes.text))),
         );
-
-      print(
-        " P${ans[int.parse(processes.text) - 1]}",
-      );
+      }
     }
 
     return Scaffold(
@@ -331,6 +358,12 @@ class _ConversionState extends State<Conversion> {
             ),
             child: Column(
               children: [
+                Center(
+                  child: Text(
+                    "Flood Relief Management",
+                    style: TextStyle(fontSize: 30),
+                  ),
+                ),
                 TextField(
                   controller: processes,
                   decoration: InputDecoration(
@@ -354,13 +387,14 @@ class _ConversionState extends State<Conversion> {
                     else
                       {matrix()}
                   },
+                  child: Text("Allocation Matrix"),
                 ),
                 RaisedButton(
                   onPressed: () {
                     // print(grid);
                     needMatrix();
                   },
-                  child: Text("press"),
+                  child: Text("Compute Need Mtrix"),
                 ),
                 RaisedButton(
                   onPressed: () => {
