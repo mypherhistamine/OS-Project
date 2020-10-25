@@ -65,4 +65,3 @@ void main() {
   // cout << " P" << ans[n - 1] << endl;
 }
 
-// This code is contributed by SHUBHAMSINGH10

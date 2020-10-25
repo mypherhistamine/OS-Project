@@ -18,17 +18,21 @@ class _ConversionState extends State<Conversion> {
   List availableGrid = List.generate(10, (index) => null);
   List needGrid = List.generate(10, (i) => List(10), growable: false);
   // List ans = List.generate(10, (index) => null);
-  List f = List.generate(10, (index) => null);
+  //List f = List.generate(10, (index) => null);
   List visited = List.generate(10, (index) => null);
   List work = List.generate(10, (index) => null);
   List safeSequence = List.generate(10, (index) => null);
   List ans = List.generate(10, (index) => null);
+
+  int showDataReset = 0;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     void matrix() {
+      //res matrix
+
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -37,6 +41,9 @@ class _ConversionState extends State<Conversion> {
                   borderRadius: BorderRadius.circular(20.0)), //this right here
 
               child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 3),
+                    borderRadius: BorderRadius.circular(20.0)),
                 height: 500,
                 width: 500,
                 child: Center(
@@ -139,86 +146,97 @@ class _ConversionState extends State<Conversion> {
     }
 
     void matrix1() {
+      //max matrix
       showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)), //this right here
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)), //this right here
 
-              child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 3),
-                    borderRadius: BorderRadius.circular(20.0)),
-                height: 500,
-                width: 500,
-                child: Center(
-                  child: Form(
-                    key: _formKey,
-                    child: Container(
-                      height: 400,
-                      width: 200,
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 3),
+                  borderRadius: BorderRadius.circular(20.0)),
+              height: 500,
+              width: 500,
+              child: Center(
+                child: Form(
+                  key: _formKey,
+                  child: Container(
+                    height: 400,
+                    width: 200,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
                       child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: Column(
-                            children: [
-                              for (int i = 0;
-                                  i < int.parse(processes.text);
-                                  i++)
-                                Row(
-                                  children: [
-                                    for (int j = 0;
-                                        j < int.parse(resources.text);
-                                        j++)
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.blueAccent)),
-                                        height: 50,
-                                        width: 50,
-                                        child: TextFormField(
-                                          validator: (val) {
-                                            maxGrid[i][j] = int.parse(val);
-                                            return;
-                                          },
-                                          maxLength: 2,
-                                          decoration: new InputDecoration(
-                                            border: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                            enabledBorder: InputBorder.none,
-                                            errorBorder: InputBorder.none,
-                                            disabledBorder: InputBorder.none,
-                                            contentPadding: EdgeInsets.only(
-                                                left: 15,
-                                                bottom: 11,
-                                                top: 11,
-                                                right: 15),
-                                          ),
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          children: [
+                            for (int i = 0; i < int.parse(processes.text); i++)
+                              Row(
+                                children: [
+                                  for (int j = 0;
+                                      j < int.parse(resources.text);
+                                      j++)
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.blueAccent)),
+                                      height: 50,
+                                      width: 50,
+                                      child: TextFormField(
+                                        validator: (val) {
+                                          maxGrid[i][j] = int.parse(val);
+                                          return;
+                                        },
+                                        maxLength: 2,
+                                        decoration: new InputDecoration(
+                                          border: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                          contentPadding: EdgeInsets.only(
+                                              left: 15,
+                                              bottom: 11,
+                                              top: 11,
+                                              right: 15),
                                         ),
-                                      )
-                                  ],
-                                ),
-                              RaisedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState.validate()) {
-                                    _formKey.currentState.save();
-                                  }
-                                  Navigator.pop(context);
-                                },
-                                child: Text("save"),
-                              )
-                            ],
-                          ),
+                                      ),
+                                    )
+                                ],
+                              ),
+                            RaisedButton(
+                              splashColor: Colors.cyan,
+                              color: Color(0xff47075E),
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(color: Colors.red, width: 3),
+                                  borderRadius: BorderRadius.circular(18)),
+                              onPressed: () {
+                                if (_formKey.currentState.validate()) {
+                                  _formKey.currentState.save();
+                                }
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                "ALLOCATE",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            );
-          });
+            ),
+          );
+        },
+      );
     }
 
     void needMatrix() {
@@ -254,6 +272,9 @@ class _ConversionState extends State<Conversion> {
             child: Form(
               key: _form,
               child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 3),
+                    borderRadius: BorderRadius.circular(20.0)),
                 padding: EdgeInsets.only(top: 40),
                 height: 300,
                 width: 400,
@@ -373,10 +394,10 @@ class _ConversionState extends State<Conversion> {
           print("P" + safeSequence[i].toString());
           if (i != int.parse(processes.text) - 1) print(" -> ");
         }
-        Navigator.push(
+       
+              builder: (context) => Answer(ans, int.parse(processes.text) Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => Answer(ans, int.parse(processes.text))),
+          MaterialPageRoute()),
         );
       }
     }
@@ -389,7 +410,7 @@ class _ConversionState extends State<Conversion> {
           height: size.height,
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
                   margin: EdgeInsets.only(top: 50, bottom: 10),
@@ -420,7 +441,7 @@ class _ConversionState extends State<Conversion> {
                     // ],
                   ),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
                         margin: EdgeInsets.only(bottom: 10, top: 30),
@@ -433,6 +454,11 @@ class _ConversionState extends State<Conversion> {
                           ),
                         ),
                         child: TextField(
+                          onTap: () {
+                            setState(() {
+                              showDataReset = 0;
+                            });
+                          },
                           keyboardType: TextInputType.number,
                           controller: processes,
                           decoration: InputDecoration(
@@ -511,6 +537,7 @@ class _ConversionState extends State<Conversion> {
                               fontSize: 20),
                         ),
                       ),
+
                       RaisedButton(
                         splashColor: Colors.cyan,
                         color: Color(0xff47075E),
@@ -532,6 +559,7 @@ class _ConversionState extends State<Conversion> {
                               fontSize: 20),
                         ),
                       ),
+
                       RaisedButton(
                         splashColor: Colors.cyan,
                         color: Color(0xff47075E),
@@ -570,6 +598,16 @@ class _ConversionState extends State<Conversion> {
                       ),
                       SizedBox(
                         height: 40,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 20),
+                        child: Opacity(
+                          opacity: showDataReset.toDouble(),
+                          child: Text(
+                            'DATA RESET !!',
+                            style: TextStyle(fontSize: 20, color: Colors.red),
+                          ),
+                        ),
                       )
                     ],
                   ),
@@ -579,6 +617,34 @@ class _ConversionState extends State<Conversion> {
           ),
         ),
       ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   backgroundColor: Colors.red,
+      //   label: Text(
+      //     'Reset',
+      //     style: TextStyle(fontSize: 15),
+      //   ),
+      //   icon: Icon(
+      //     Icons.clear,
+      //     color: Colors.white,
+      //     size: 18,
+      //   ),
+      //   onPressed: () {
+      //     // final snackBar = SnackBar(content: Text('Data Reset !!'));
+      //     // Scaffold.of(context).showSnackBar(snackBar);
+
+      //     setState(() {
+      //       showDataReset = 1;
+      //       grid.clear();
+      //       maxGrid.clear();
+      //       availableGrid.clear();
+      //       needGrid.clear();
+      //       visited.clear();
+      //       work.clear();
+      //       safeSequence.clear();
+      //       ans.clear();
+      //     });
+      //   },
+      // ),
     );
   }
 }
